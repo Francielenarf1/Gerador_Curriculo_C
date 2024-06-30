@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Gerador de CurrículoS</title>
+</head>
+<body>
+    
+    <section class="container my-5 bg-light w-100 shadow-lg p-3 mb-5 bg-light rounded">
+        <div class="container-fluid bg-light text-black py-3">
+            <header class="text-center">
+                <h1 class="display-3">Gerador de Currículos</h1><br>
+            </header>
+            <form class="container bg-light row g-3" id="curriculo-form" action="process.php" method="POST" enctype="multipart/form-data">
+                <div class="col-md-12">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" class="form-control">
+                </div>
+               
+                <div class="col-md-4">
+                    <label for="data_nascimento">Data de Nascimento:</label>
+                    <input type="date" id="data-nascimento" name="data_nascimento" class="form-control">
+                </div>
+               
+                <button type="button" id="calcular-idade" class="btn btn-primary btn-sm col-md-1">Calcular Idade</button>
+                <div id="idade"></div>
+                
+                            
+                <div class="col-md-6">
+                    <label for="telefone">Telefone:</label>
+                    <input type="text" id="telefone" name="telefone" class="form-control" placeholder="(XX) XXXXX-XXXX">
+                </div>
+                <div class="col-md-12">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="user@dominio.com">
+                </div>
+                <div class="col-md-12">
+                    <label for="endereco">Endereço:</label>
+                    <input type="text" id="endereco" name="endereco" class="form-control" placeholder="Rua/Avenida fulano de tal, número:0000, Toledo-PR">
+                </div>
+                <div class="col-md-12">
+                    <label for="qualidades">Habilidades:</label>
+                    <textarea id="qualidades" name="qualidades" class="form-control" placeholder="Informe se possui habilidades com línguas estrangeiras, se dirige veículo da firma, se é comunicativo, se domina Office, proativo e coisas afins"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <label for="defeitos">Quero melhorar:</label>
+                    <textarea id="defeitos" name="defeitos" class="form-control" placeholder="Informe quais as dificuldades que possui e se há um plano para isso acontecer"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label for="foto">Foto:</label>
+                    <input type="file" id="foto" name="foto" class="form-control">
+                </div>
+                
+                <blockquote class="blockquote text-center"></blockquote><br>
+                
+            <div class="form-group">
+                    <div id="historico_educacional">
+                        <div class="historico">
+                            <label for="historico"><mark>Histórico de Formação/Qualificação:</mark></label>
+                            <div class="experiencia">
+                                <input type="text" name="historico_instituicao[]" placeholder="Instituição em que cursou" class="form-control"><br>
+                                <input type="text" name="historico_curso[]" placeholder="Curso" class="form-control"><br>
+                                <div class="col-md-3 container bg-light row g-3">
+                                    <input type="month" name="historico_inicio[]" placeholder="Data de Início" class="form-control">
+                                    <input type="month" name="historico_fim[]" placeholder="Data de Fim" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <button type="button" id="add-historico" class="btn btn-primary">Adicionar Histórico</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experiencias"><mark>Experiências Profissionais:</mark></label>
+                    <div class="experiencias">
+                        <input type="text" name="experiencia_titulo[]" placeholder="Profissão/Registro de Contratação" class="form-control"><br>
+                        <input type="text" name="experiencia_empresa[]" placeholder="Empresa" class="form-control"><br>
+                        <textarea name="experiencia_descricao[]" placeholder="Descrição das principais atividades desenvolvidas" class="form-control"></textarea><br>
+                        <div class="col-md-3 container bg-light row g-3"><br>
+                            <input type="month" name="experiencia_inicio[]" placeholder="Data de Início" class="form-control"><br>
+                            <input type="month" name="experiencia_fim[]" placeholder="Data de Fim" class="form-control">
+                        </div>
+                    </div><br>
+                    <button type="button" id="add-experiencia" class="btn btn-primary">Adicionar Experiência</button><br><br>
+                    
+                    <button type="submit" class="btn-lg btn-success">Gerar Currículo </button>
+                </div>
+
+            </form>
+        </div>
+    </section>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#add-historico').on('click', function() {
+                $('#historico_educacional').append(`
+                    <div class="historico">
+                        <label for="historico"><mark>Histórico de Formação/Qualificação:</mark></label>
+                        <div class="experiencia">
+                            <input type="text" name="historico_instituicao[]" placeholder="Instituição em que cursou" class="form-control"><br>
+                            <input type="text" name="historico_curso[]" placeholder="Curso" class="form-control"><br>
+                            <div class="col-md-3 container bg-light row g-3">
+                                <input type="month" name="historico_inicio[]" placeholder="Data de Início" class="form-control">
+                                <input type="month" name="historico_fim[]" placeholder="Data de Fim" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            $('#add-experiencia').on('click', function() {
+                $('.experiencias').append(`
+                     <label for="experiencias"><mark>Experiências Profissionais:</mark></label>
+                    <div class="experiencias">
+                    <input type="text" name="experiencia_titulo[]" placeholder="Profissão/Registro de Contratação" class="form-control"><br>
+                    <input type="text" name="experiencia_empresa[]" placeholder="Empresa" class="form-control"><br>
+                    <textarea name="experiencia_descricao[]" placeholder="Descrição das principais atividades desenvolvidas" class="form-control"></textarea><br>
+                    <div class="col-md-3 container bg-light row g-3"><br>
+                        <input type="month" name="experiencia_inicio[]" placeholder="Data de Início" class="form-control"><br>
+                        <input type="month" name="experiencia_fim[]" placeholder="Data de Fim" class="form-control">
+                    </div>
+                `);
+            });
+        });
+    </script>
+</body>
+</html>
+
+        </div>
+    </section>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Função para calcular idade
+            $('#calcular-idade').on('click', function() {
+                const dataNascimento = $('#data-nascimento').val();
+                
+                if (dataNascimento) {
+                    const hoje = new Date();
+                    const dataNascimentoFormatada = new Date(dataNascimento);
+                    const diffMilissegundos = hoje - dataNascimentoFormatada;
+                    const idade = Math.floor(diffMilissegundos / (1000 * 60 * 60 * 24 * 365));
+                    
+                    $('#idade').text(`Idade: ${idade} anos`);
+                    $('#idade-input').val(idade);
+                } else {
+                    alert('Por favor, insira a data de nascimento.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
